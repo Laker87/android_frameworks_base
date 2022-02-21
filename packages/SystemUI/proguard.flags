@@ -63,4 +63,6 @@
 
 # Google rules
 -keep class com.google.** { *; }
+-keep class com.google.android.systemui.** { *; }
 -keep class vendor.** { *; }
+

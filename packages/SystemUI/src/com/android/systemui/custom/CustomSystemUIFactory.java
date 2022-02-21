@@ -26,12 +26,4 @@ public class CustomSystemUIFactory extends SystemUIFactory {
     public BackGestureTfClassifierProvider createBackGestureTfClassifierProvider(AssetManager am, String modelName) {
         return new BackGestureTfClassifierProviderGoogle(am, modelName);
     }
-
-    @Override
-    public void init(Context context, boolean fromTest) throws ExecutionException, InterruptedException {
-        super.init(context, fromTest);
-        if (shouldInitializeComponents()) {
-            ((CustomSysUIComponent) getSysUIComponent()).createKeyguardSmartspaceController();
-        }
-    }
 }

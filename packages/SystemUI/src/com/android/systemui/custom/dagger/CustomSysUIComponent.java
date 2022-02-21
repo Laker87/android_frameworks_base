@@ -1,13 +1,13 @@
 package com.android.systemui.custom.dagger;
 
-import com.android.systemui.custom.keyguard.CustomKeyguardSliceProvider;
-import com.android.systemui.custom.smartspace.KeyguardSmartspaceController;
 import com.android.systemui.dagger.DefaultComponentBinder;
 import com.android.systemui.dagger.DependencyProvider;
 import com.android.systemui.dagger.SystemUIBinder;
 import com.android.systemui.dagger.SystemUIModule;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.SysUIComponent;
+
+import com.google.android.systemui.keyguard.KeyguardSliceProviderGoogle;
 
 import dagger.Subcomponent;
 
@@ -28,8 +28,5 @@ public interface CustomSysUIComponent extends SysUIComponent {
     /**
      * Member injection into the supplied argument.
      */
-    void inject(CustomKeyguardSliceProvider customKeyguardSliceProvider);
-
-    @SysUISingleton
-    KeyguardSmartspaceController createKeyguardSmartspaceController();
+    void inject(KeyguardSliceProviderGoogle keyguardSliceProviderGoogle);
 }

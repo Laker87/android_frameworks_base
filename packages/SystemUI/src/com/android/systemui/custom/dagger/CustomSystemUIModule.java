@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardViewController;
 import com.android.systemui.broadcast.BroadcastDispatcher;
-import com.android.systemui.custom.smartspace.KeyguardSmartspaceController;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dagger.SysUISingleton;
@@ -24,7 +23,6 @@ import com.android.systemui.dock.DockManagerImpl;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.media.dagger.MediaModule;
-import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.plugins.qs.QSFactory;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.power.EnhancedEstimates;
@@ -38,7 +36,6 @@ import com.android.systemui.recents.RecentsImplementation;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.FeatureFlags;
 import com.android.systemui.statusbar.NotificationLockscreenUserManager;
-import com.android.systemui.statusbar.NotificationLockscreenUserManagerImpl;
 import com.android.systemui.statusbar.NotificationMediaManager;
 import com.android.systemui.statusbar.NotificationShadeWindowController;
 import com.android.systemui.statusbar.notification.NotificationEntryManager;
@@ -65,10 +62,8 @@ import com.android.systemui.statusbar.policy.SensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.theme.ThemeOverlayController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
-import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
-import com.google.android.systemui.smartspace.KeyguardMediaViewController;
-import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
-import com.google.android.systemui.smartspace.SmartSpaceController;     
+
+import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
 
 import dagger.Binds;
 import dagger.Module;
@@ -96,7 +91,7 @@ public abstract class CustomSystemUIModule {
 
     @Binds
     abstract NotificationLockscreenUserManager bindNotificationLockscreenUserManager(
-            NotificationLockscreenUserManagerImpl notificationLockscreenUserManager);
+        NotificationLockscreenUserManagerGoogle notificationLockscreenUserManager);
 
     @Provides
     @SysUISingleton
@@ -205,38 +200,4 @@ public abstract class CustomSystemUIModule {
 
     @Binds
     abstract ThemeOverlayController provideThemeOverlayController(CustomThemeOverlayController themeOverlayController);
-
-    // Google
-    @Provides
-    @SysUISingleton
-    static SmartSpaceController provideSmartSpaceController(Context context, KeyguardUpdateMonitor updateMonitor, Handler handler, AlarmManager am, DumpManager dm) {
-        return new SmartSpaceController(context, updateMonitor, handler, am, dm);
-    }
-
-    @Provides
-    @SysUISingleton
-    static KeyguardSmartspaceController provideKeyguardSmartspaceController(Context context, FeatureFlags featureFlags,
-            KeyguardZenAlarmViewController keyguardZenAlarmViewController, KeyguardMediaViewController keyguardMediaViewController) {
-        return new KeyguardSmartspaceController(context, featureFlags, keyguardZenAlarmViewController, keyguardMediaViewController);
-    }
-
-    @Provides
-    @SysUISingleton
-    static KeyguardZenAlarmViewController provideKeyguardZenAlarmViewController(Context context, BcSmartspaceDataPlugin bcSmartspaceDataPlugin, ZenModeController zenModeController,
-            AlarmManager alarmManager, NextAlarmController nextAlarmController, Handler handler) {
-        return new KeyguardZenAlarmViewController(context, bcSmartspaceDataPlugin, zenModeController, alarmManager, nextAlarmController, handler);
-    }
-
-    @Provides
-    @SysUISingleton
-    static KeyguardMediaViewController provideKeyguardMediaViewController(Context context, BcSmartspaceDataPlugin bcSmartspaceDataPlugin,
-            @Main DelayableExecutor delayableExecutor, NotificationMediaManager notificationMediaManager, BroadcastDispatcher broadcastDispatcher) {
-        return new KeyguardMediaViewController(context, bcSmartspaceDataPlugin, delayableExecutor, notificationMediaManager, broadcastDispatcher);
-    }
-
-    @Provides
-    @SysUISingleton
-    static BcSmartspaceDataPlugin provideBcSmartspaceDataPlugin() {
-        return new BcSmartspaceDataProvider();
-    }
 }
